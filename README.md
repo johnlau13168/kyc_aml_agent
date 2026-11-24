@@ -106,6 +106,47 @@ pip install llama-cpp-python \
   --extra-index-url https://abetlen.github.io/llama-cpp-python/whl/cpu
 ```
 
+## Troubleshooting
+
+**`ModuleNotFoundError: No module named 'langchain_core'` (or `nicegui`,
+`langgraph`, `llama_cpp`, …)**
+
+The interpreter running the script does not have the requirements installed.
+This is an environment problem, not a code problem. Check which interpreter is
+in use and confirm it is the project virtual environment:
+
+```bash
+python -c "import sys; print(sys.executable)"
+```
+
+`app.py` performs a preflight check and lists every missing package together
+with the exact install command, so this failure is reported clearly instead of
+as a bare traceback.
+
+**`llama-cpp-python` fails to build on Python 3.13+**
+
+There are no published wheels for those versions, so `pip` compiles the
+extension from source and needs a C++ toolchain (MSVC Build Tools on Windows,
+`build-essential` on Linux). Use Python 3.10–3.12, which has wheels.
+
+**VSCode shows unresolved-import squiggles but the app runs fine**
+
+The editor's selected interpreter differs from the one used to run the app. Run
+*Python: Select Interpreter* and choose `.venv\Scripts\python.exe` (Windows) or
+`.venv/bin/python`. To make that permanent, add a workspace setting:
+
+```json
+{
+  "python.defaultInterpreterPath": "${workspaceFolder}/.venv/Scripts/python.exe"
+}
+```
+
+**`[WinError 10048] address already in use` on Windows**
+
+A previous run is still holding port 8085. The application calls
+`free_port_windows()` at start-up to release it; if that fails, close the old
+process manually or set a different `PORT`.
+
 ## Using the interface
 
 1. Choose the remitting and beneficiary banks (sanctioned institutions such as
