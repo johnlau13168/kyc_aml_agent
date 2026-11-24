@@ -1,0 +1,19 @@
+﻿services:
+  kyc-aml-agent:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: kyc-aml-agent
+    ports:
+      - "7860:7860"
+    environment:
+      - SPACE_ID=local-docker
+      - GGUF_REPO_ID=Qwen/Qwen2.5-1.5B-Instruct-GGUF
+      - GGUF_FILENAME=qwen2.5-1.5b-instruct-q4_k_m.gguf
+      - MODEL_LABEL=Qwen2.5-1.5B-Instruct
+    volumes:
+      - hf_model_cache:/app/hf_model_cache
+    restart: unless-stopped
+
+volumes:
+  hf_model_cache:
