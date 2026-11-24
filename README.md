@@ -1,6 +1,6 @@
 ---
 title: 3-Layer Guardrailed Hybrid KYC/AML Compliance Agent
-emoji: 🛡�?
+emoji: 🛡
 colorFrom: blue
 colorTo: green
 sdk: gradio
@@ -10,7 +10,7 @@ app_port: 7860
 pinned: false
 ---
 
-# 🛡�?3-Layer Guardrailed Hybrid KYC/AML Compliance Agent
+# 🛡3-Layer Guardrailed Hybrid KYC/AML Compliance Agent
 
 An autonomous yet deterministically guardrailed **Anti-Money Laundering (AML) & Know Your Customer (KYC)** transaction triage system tailored for Hong Kong banking corridors (SWIFT, CHATS/RTGS, and FPS).
 
@@ -18,19 +18,19 @@ Built with **LangGraph**, **NiceGUI**, **Pydantic**, and a self-contained local 
 
 ---
 
-## 🏗�?3-Layer Hybrid Architecture
+## 🏗3-Layer Hybrid Architecture
 
-1. **Layer 1 �?Mandatory Statutory Compliance Gate (Deterministic Python)**
+1. **Layer 1 Mandatory Statutory Compliance Gate (Deterministic Python)**
    * **UN / OFAC / EU Sanctions Screening:** Screens both remitting (`From Bank`) and beneficiary (`To Bank`) institutions against **73,930+ consolidated sanctioned entities** from OpenSanctions (`compliance_data.zip`).
    * **FATF High-Risk Jurisdiction Check (Rec. 19):** Flags payment corridors involving FATF high-risk or monitored jurisdictions (`Iran`, `Myanmar`, `Vietnam`, `Syria`, `Russia`, `North Korea`).
    * **HKMA AMLO CDD Threshold:** Flags transactions exceeding **HKD 120,000** under Hong Kong Cap. 615.
    * **Dormant Account Reactivation Alert:** Detects movement exceeding **HKD 50,000** on inactive/dormant accounts.
 
-2. **Layer 2 �?Autonomous AI Detective Agent (LangGraph ReAct Tool Loop)**
+2. **Layer 2 Autonomous AI Detective Agent (LangGraph ReAct Tool Loop)**
    * Dynamically evaluates Layer 1 findings and account profiles.
    * Automatically invokes `check_enhanced_cdd_requirements` (HKMA AML/CFT Guideline Section 4) and `search_kyc_regulation` (200 FinCEN 31 CFR 1010/1020 Customer Due Diligence clauses) when red flags or dormant/corporate accounts are present—or short-circuits clean active transfers to save latency.
 
-3. **Layer 3 �?Guardrail Synthesizer & Hard Compliance Overrides**
+3. **Layer 3 Guardrail Synthesizer & Hard Compliance Overrides**
    * Compiles structured violation reports (`Pydantic`) with interactive bookmark navigation linking every detected violation directly to its underlying statutory or watchlist evidence.
    * Enforces deterministic risk floors (e.g., any `UN-OFAC-SANCTIONS` hit forces `CRITICAL` risk regardless of LLM variance).
 
