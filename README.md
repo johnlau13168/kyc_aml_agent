@@ -1,15 +1,3 @@
----
-title: 3-Layer Guardrailed Hybrid KYC/AML Compliance Agent
-emoji: 🛡
-colorFrom: blue
-colorTo: green
-sdk: gradio
-sdk_version: 5.9.1
-app_file: app.py
-app_port: 7860
-pinned: false
----
-
 # 🛡3-Layer Guardrailed Hybrid KYC/AML Compliance Agent
 
 An autonomous yet deterministically guardrailed **Anti-Money Laundering (AML) & Know Your Customer (KYC)** transaction triage system tailored for Hong Kong banking corridors (SWIFT, CHATS/RTGS, and FPS).
@@ -41,14 +29,10 @@ Built with **LangGraph**, **NiceGUI**, **Pydantic**, and a self-contained local 
 ```text
 ├── app.py                 # Main LangGraph 3-layer agent & NiceGUI web interface
 ├── compliance_data.zip    # Pre-packaged OpenSanctions CSV (73,930 entities) + FinCEN CDD text
-├── Dockerfile             # Pre-bakes Qwen2.5-1.5B-Instruct GGUF & exposes port 8085
+├── Dockerfile             # Pre-bakes Qwen2.5-1.5B-Instruct GGUF 
 ├── requirements.txt       # Python dependencies (NiceGUI, LangGraph, llama-cpp-python)
 ├── .gitignore             # Excludes local model cache & virtual environments
-└── README.md              # Project documentation & Hugging Face Space metadata
-```text
-└── README.md              # Project documentation & Hugging Face Space metadata
-```
-
+└── README.md              
 ---
 
 ## 🚀 Running Locally
@@ -92,7 +76,7 @@ Open `http://localhost:8085` in your browser. On first launch, **Qwen2.5-1.5B-In
 
 ## 🚀 Running Locally
 
-### Option A: Native Python Execution (Quick Start)
+### Native Python Execution (Quick Start)
 
 Run directly with Python—model downloads automatically on first launch into `hf_model_cache/`:
 
@@ -106,60 +90,5 @@ python app.py
 
 Open `http://localhost:8085` in your browser. On first launch, **Qwen2.5-1.5B-Instruct-GGUF** (~986 MB) downloads automatically from HuggingFace and runs completely offline thereafter.
 
-### Option B: Dockerized Deployment (Production-Ready)
 
-Docker pre-bakes the model cache for instant startup anywhere. No `pip install` required on host!
 
-```bash
-# Build & run in one command — maps port 8085 from container to host
-docker run --name kyc-aml-agent -p 8085:8085 -d --restart unless-stopped \
-  ghcr.io/yourusername/kyc-aml-agent
-
-# Open the interface  
-open http://localhost:8085
-```
-
-**Docker Volume Mounts (Optional):** For persistent model cache updates without rebuilding:
-
-```bash
-docker run --name kyc-aml-agent -p 8085:8085 \
-  -v /path/to/local/cache:/app/hf_model_cache \
-  -d ghcr.io/yourusername/kyc-aml-agent
-```</parameter>
-<parameter=old_text>
-### Option B: Dockerized Deployment (Production-Ready)
-
-Docker pre-bakes the model cache for instant startup anywhere. No `pip install` required on host!
-
-```bash
-# Build & run in one command — maps port 8085 from container to host
-docker run --name kyc-aml-agent -p 8085:8085 -d --restart unless-stopped \
-  ghcr.io/yourusername/kyc-aml-agent
-
-# Open the interface  
-open http://localhost:8085
-```
-
-**Docker Volume Mounts (Optional):** For persistent model cache updates without rebuilding:
-
-```bash
-docker run --name kyc-aml-agent -p 8085:8085 \
-  -v /path/to/local/cache:/app/hf_model_cache \
-  -d ghcr.io/yourusername/kyc-aml-agent
-```</parameter>
-<parameter=start_line>
-64
-Open `http://localhost:8085` in your browser. On first launch, **Qwen2.5-1.5B-Instruct-GGUF** (~986 MB) downloads automatically from HuggingFace and runs completely offline thereafter.</parameter>
-<parameter=old_text>
-## 🚀 Local Execution (Windows / Linux / macOS)</parameter>
-<parameter=start_line>
-52
----
-
-## 🚀 Local Execution (Windows / Linux / macOS)
-
-```bash
-pip install -r requirements.txt --extra-index-url https://github.io
-python app.py
-```
-Open `http://localhost:8085` in your browser. On first launch, `Qwen2.5-1.5B-Instruct-GGUF` (~986 MB) downloads automatically into `hf_model_cache/` and runs completely offline thereafter.
