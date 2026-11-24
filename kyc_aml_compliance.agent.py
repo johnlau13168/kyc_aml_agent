@@ -187,7 +187,6 @@ ORIGIN_OPTIONS = [
     "Hong Kong", "Singapore", "United Kingdom", "United States", "Japan",
     "Mainland China", "Iran", "Myanmar", "Vietnam", "Syria"
 ]
-FATF_HIGH_RISK = {"iran", "myanmar", "vietnam", "syria"}
 
 
 # =====================================================================
@@ -617,8 +616,10 @@ def main_page():
                 tx_payload = {
                     "from_bank": from_bank,
                     "from_account": (from_acct_input.value or "").strip(),
+                    "from_account_no": (from_acct_no_input.value or "").strip(),
                     "to_bank": to_bank,
                     "to_account": (to_acct_input.value or "").strip(),
+                    "to_account_no": (to_acct_no_input.value or "").strip(),
                     "type": type_input.value,
                     "amount_hkd": int(amount_input.value or 0)
                 }
@@ -753,28 +754,41 @@ def main_page():
             log_debug("[UI CLICK] UI rendering complete!")
 
 
-        run_btn.on_click(execute_triage)   # <-- Indented inside execute_triage(), so it NEVER runs!
+        run_btn.on_click(execute_triage)   # bound at page-build time, after the handler is defined
         log_debug("[UI INIT] main_page() rendered and run_btn.on_click bound.")
 
 
 
 def free_port_windows(port: int) -> None:
+    """Terminate any process listening on ``port`` (Windows only, best effort)."""
     try:
-        output = subprocess.check_output(f"netstat -ano | findstr :{port}", shell=True, text=True)
-        for line in output.splitlines():
-            parts = line.strip().split()
-            if len(parts) not in range(0, 5) and f":{port}" in parts and parts == "LISTENING":
-                pid = parts
-                if pid.isdigit() and int(pid) != os.getpid():
-                    subprocess.run(f"taskkill /F /PID {pid}", shell=True, stdout=subprocess.DEVNULL,
-                        stderr=subprocess.DEVNULL)
+        output = subprocess.check_output(
+            ["netstat", "-ano", "-p", "tcp"], text=True, errors="ignore"
+        )
     except Exception:
-        pass
+        return
+    for line in output.splitlines():
+        parts = line.split()
+        if len(parts) < 5 or parts[0].upper() != "TCP":
+            continue
+        local_address, state, pid_text = parts[1], parts[3], parts[4]
+        if state.upper() != "LISTENING" or not local_address.endswith(f":{port}"):
+            continue
+        if not pid_text.isdigit():
+            continue
+        pid = int(pid_text)
+        if pid == os.getpid():
+            continue
+        log_debug(f"[PORT] Releasing port {port} from stale process {pid}...")
+        subprocess.run(
+            ["taskkill", "/F", "/PID", str(pid)],
+            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=False,
+        )
 
 if __name__ in {"__main__", "__mp_main__"}:
     is_hf_space = os.getenv("SPACE_ID") is not None
     PORT = 7860 if is_hf_space else 8085
-    if not is_hf_space:
+    if sys.platform == "win32" and not is_hf_space:
         free_port_windows(PORT)
     ui.run(title="3-Layer Guardrailed Hybrid KYC/AML Agent", host="0.0.0.0", port=PORT,
         show=not is_hf_space, reload=False, reconnect_timeout=30.0)

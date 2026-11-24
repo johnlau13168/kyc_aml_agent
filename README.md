@@ -110,7 +110,8 @@ pip install llama-cpp-python \
 
 1. Choose the remitting and beneficiary banks (sanctioned institutions such as
    *Bank Melli* are preloaded alongside clean commercial banks).
-2. Select the account profiles, transfer type and amount in HKD.
+2. Select the account profiles and account numbers, transfer type and amount in
+   HKD.
 3. Select **Run 3-Layer Hybrid Agent**.
 
 The result page shows, in order:
@@ -228,8 +229,8 @@ chunks (about 200 clauses) at start-up.
   bound the risk tier, but the explanation text should be reviewed by a human.
 - There is no authentication, authorisation, persistence or audit trail. The
   application is a single-user demonstration.
-- `free_port_windows()` is a convenience helper for local Windows runs and is
-  best-effort only.
+- `free_port_windows()` is a best-effort convenience helper that runs only on
+  Windows, outside container and Hugging Face Spaces deployments.
 
 ## Data sources and attribution
 
