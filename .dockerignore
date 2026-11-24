@@ -1,0 +1,14 @@
+.git
+.gitignore
+.dockerignore
+.venv
+venv
+__pycache__
+*.py[cod]
+hf_model_cache
+*.gguf
+*.log
+.nicegui
+.idea
+.vscode
+README.md

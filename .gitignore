@@ -1,0 +1,32 @@
+# Local Hugging Face model cache & GGUF weights (too large for GitHub)
+hf_model_cache/
+*.gguf
+
+# Uncompressed datasets (compliance_data.zip is tracked instead)
+targets.simple.csv
+real_kyc_cdd_regulation.txt
+
+# Python virtual environments and caches
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# NiceGUI runtime artefacts
+.nicegui/
+
+# Logs and local scratch files
+*.log
+build.log
+run.log
+
+# Editors and operating systems
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+desktop.ini
